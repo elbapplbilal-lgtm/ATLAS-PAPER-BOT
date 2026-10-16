@@ -1,0 +1,21 @@
+name: ATLAS safety checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Static Python syntax
+        run: python -m py_compile bot.py demo_trader.py
+      - name: All mocked unit tests (no Binance credentials)
+        run: python -m unittest discover -s tests -v
+      - name: Offline-only paper test
+        run: python bot.py --mode offline-test --symbols BTCUSDT --report /tmp/atlas-offline.json
