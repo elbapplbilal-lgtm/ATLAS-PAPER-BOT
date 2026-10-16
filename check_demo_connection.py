@@ -1,31 +1,72 @@
 #!/usr/bin/env python3
-"""Read-only authentication health check for Binance Futures Demo.
-Never submits, modifies, or cancels an order. Do not log credentials.
+"""Read-only Binance Futures DEMO connectivity diagnostics.
+
+Public GET /fapi/v1/time and signed GET /fapi/v2/account ONLY.
+Never prints key/secret, signed query, account balances, URL, or API error text.
 """
+import hashlib
+import hmac
+import json
+import os
 import sys
-from demo_trader import DemoClient, DemoError, DEMO_HOST
+import time
+from urllib import parse, request, error
+
+BASE = "https://demo-fapi.binance.com"
+
+def get_json(path, headers=None):
+    req = request.Request(BASE + path, headers=headers or {}, method="GET")
+    try:
+        with request.urlopen(req, timeout=15) as response:
+            return json.load(response), None, None
+    except error.HTTPError as exc:
+        # Only disclose coarse diagnostics, not signed URL or private account data.
+        try:
+            payload = json.loads(exc.read(2048).decode("utf-8"))
+            code = payload.get("code") if isinstance(payload, dict) else None
+            code = code if isinstance(code, int) and -999999 < code < 999999 else None
+        except (ValueError, UnicodeError, OSError):
+            code = None
+        return None, exc.code, code
+    except (OSError, TimeoutError, ValueError):
+        return None, "NETWORK", None
 
 def main():
-    if DEMO_HOST != "https://demo-fapi.binance.com":
-        print("FAIL: Unexpected exchange host; refused to connect.")
+    if BASE != "https://demo-fapi.binance.com":
+        print("FAIL: Wrong exchange host.")
         return 2
-    try:
-        client = DemoClient()
-        # Only a single signed GET; no state-changing API calls.
-        account = client.call("GET", "/fapi/v2/account")
-        if not isinstance(account, dict) or not ("assets" in account or "totalWalletBalance" in account):
-            print("FAIL: Unexpected authenticated account response (not printing private data).")
-            return 2
-        print("SUCCESS: Binance USD-M Futures DEMO API signed read-only request succeeded.")
-        print("No orders were opened, modified, or cancelled.")
-        return 0
-    except (DemoError, Exception) as exc:
-        # Do not print exception details, because transports may include signed URLs.
-        print("FAIL: Binance DEMO signed read-only request could not be verified.")
-        print("Check that BOTH GitHub secrets match the current DEMO key pair, and demo API permissions.")
-        print("Error category:", type(exc).__name__)
-        print("No orders were sent.")
+    key = os.environ.get("BINANCE_DEMO_KEY", "").strip()
+    secret = os.environ.get("BINANCE_DEMO_SECRET", "").strip()
+    if not key or not secret:
+        print("FAIL: GitHub demo secrets missing or empty.")
         return 2
+    clock, http, api_error = get_json("/fapi/v1/time")
+    if http is not None:
+        print(f"FAIL: DEMO public server time HTTP={http}, Binance code={api_error}.")
+        return 2
+    if not isinstance(clock, dict) or not isinstance(clock.get("serverTime"), int):
+        print("FAIL: Invalid response from DEMO time server.")
+        return 2
+    print("OK: DEMO public server reachable.")
+    payload = parse.urlencode({
+        "timestamp": clock["serverTime"],
+        "recvWindow": 5000,
+    })
+    sig = hmac.new(secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
+    result, http, api_error = get_json(
+        "/fapi/v2/account?" + payload + "&signature=" + sig,
+        headers={"X-MBX-APIKEY": key, "User-Agent": "ATLAS-READONLY-DEMO"},
+    )
+    if http is not None:
+        print(f"FAIL: DEMO authenticated request HTTP={http}, Binance code={api_error}.")
+        print("No orders placed.")
+        return 2
+    if not isinstance(result, dict) or not ("assets" in result or "totalWalletBalance" in result):
+        print("FAIL: Unrecognized authenticated DEMO response.")
+        return 2
+    print("SUCCESS: Binance Futures DEMO authenticated READ-ONLY connection works.")
+    print("No orders placed; demo order execution stays disabled.")
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main())
