@@ -1,0 +1,36 @@
+name: ATLAS Paper Bot (NO REAL MONEY)
+on:
+  schedule:
+    # After closed 15-minute candles, but GitHub cron can be delayed/skipped.
+    - cron: '3,18,33,48 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: atlas-paper-only
+  cancel-in-progress: false
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify program tests
+        run: python -m unittest discover -s tests -v
+      - name: Analyze public Binance data; simulate trades ONLY
+        run: python bot.py --mode once
+      - name: Save paper-only trade state
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/paper_state.json data/summary.json data/summary.csv
+          if ! git diff --cached --quiet; then
+            git commit -m 'ATLAS paper results [skip ci]'
+            git push origin HEAD:main
+          fi
