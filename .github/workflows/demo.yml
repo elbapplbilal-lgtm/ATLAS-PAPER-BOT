@@ -1,0 +1,44 @@
+name: ATLAS Futures DEMO (virtual funds ONLY)
+on:
+  schedule:
+    - cron: '4,19,34,49 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: atlas-demo-positions
+  cancel-in-progress: false
+jobs:
+  demo:
+    # OFF by default. Explicitly authorize DEMO trading with this repo variable.
+    if: ${{ vars.ENABLE_ATLAS_DEMO == 'YES' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify mocked tests
+        run: python -m unittest discover -s tests -v
+      - name: DEMO-only order decision (NEVER live)
+        env:
+          BINANCE_DEMO_KEY: ${{ secrets.BINANCE_DEMO_KEY }}
+          BINANCE_DEMO_SECRET: ${{ secrets.BINANCE_DEMO_SECRET }}
+          ENABLE_BINANCE_DEMO_ORDERS: 'YES'
+        run: python demo_trader.py --mode trade-once
+      - name: Persist attempted demo candle (even if order failed)
+        if: always()
+        run: |
+          if [ -f data/demo_state.json ]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add data/demo_state.json
+            if ! git diff --cached --quiet; then
+              git commit -m 'ATLAS demo attempt marker [skip ci]'
+              git push origin HEAD:main
+            fi
+          fi
