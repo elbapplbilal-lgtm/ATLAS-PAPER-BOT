@@ -35,3 +35,13 @@ python bot.py --mode offline-test
 ```
 
 ما جربناش تنفيذ أمر DEMO حقيقي فبيئة ChatGPT؛ خاص مفاتيح DEMO عندك وحدك والتجربة على GitHub بعد الربط.
+
+## نتيجة اختبار الربط بتاريخ 16 أكتوبر 2026
+
+- ✅ الاسمان `BINANCE_DEMO_KEY` و`BINANCE_DEMO_SECRET` ظاهرين في GitHub Secrets (الوجود لا يثبت مطابقة القيم).
+- ✅ تم تجهيز فحص `check_demo_connection.py` لا يستخدم سوى طلبات GET على `demo-fapi.binance.com`.
+- ❌ GitHub Actions واجه `HTTP 451` من طلب **الوقت العام** `/fapi/v1/time` قبل أي مصادقة بالمفاتيح. لذلك لا يمكن الحكم على صحة مفاتيح Demo من هذا التشغيل، ويجب تغيير بيئة التشغيل أو معالجة قيود الوصول قبل الاختبار.
+- ✅ لم يُرسل الفحص أي طلب شراء أو بيع، ومازال تداول DEMO الآلي مغلقاً افتراضياً.
+- **لا تحاول تشغيل البوت بحساب حقيقي ولا تستعمل VPN لتجاوز القيود.**
+- سجل الفحص: https://github.com/elbapplbilal-lgtm/ATLAS-PAPER-BOT/actions/runs/38978929464
+
