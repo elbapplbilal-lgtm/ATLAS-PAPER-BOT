@@ -1,0 +1,25 @@
+name: Check Binance DEMO connection (READ ONLY)
+on:
+  push:
+    paths:
+      - 'check_demo_connection.py'
+      - '.github/workflows/demo-connection.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  demo-connection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout public bot code
+        uses: actions/checkout@v4
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Signed GET request to Binance Futures DEMO only
+        env:
+          BINANCE_DEMO_KEY: ${{ secrets.BINANCE_DEMO_KEY }}
+          BINANCE_DEMO_SECRET: ${{ secrets.BINANCE_DEMO_SECRET }}
+        run: python check_demo_connection.py
