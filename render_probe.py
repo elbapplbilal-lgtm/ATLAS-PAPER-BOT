@@ -5,15 +5,17 @@ No API keys, no trading, no logged secrets. Only use for reachability testing.
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
 import os, json, time
 
 HOST="https://demo-fapi.binance.com/fapi/v1/time"
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path not in ("/","/probe","/health"):
+        pathname = urlsplit(self.path).path
+        if pathname not in ("/","/probe","/health"):
             self.send_response(404);self.end_headers();return
-        if self.path == "/health":
+        if pathname == "/health":
             out={"service":"ATLAS connectivity probe","status":"up","orders_enabled":False}
         else:
             try:
