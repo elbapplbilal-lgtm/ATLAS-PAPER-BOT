@@ -27,7 +27,7 @@ def main() -> int:
         return 2
     print("=" * 54)
     print("ATLAS — BINANCE FUTURES DEMO ONLY / NO REAL MONEY")
-    print("BTC/USDT | 15m | 1x isolated | max 2 demo entries/day")
+    print("BTC/USDT | 15m | 1x isolated | max 5 demo entries/day")
     print("The bot only runs while this Termux process remains alive.")
     print("=" * 54)
     print("Paste DEMO keys. Input will not be shown or saved to disk.")
