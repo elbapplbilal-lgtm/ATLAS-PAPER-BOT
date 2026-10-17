@@ -36,7 +36,7 @@ class MultiTimeframeStrategyTests(unittest.TestCase):
         low[-1].update({'o':100,'h':104,'l':99,'c':103,'volume':500})
         low[-2].update({'h':101,'l':99})
         seq=[100,99,98,103,98,101,100]
-        with patch.object(st,'ema',side_effect=seq),patch.object(st,'rsi',return_value=61),patch.object(st,'atr',return_value=1),patch.object(st,'adx',return_value=27):
+        with patch.object(st,'ema',side_effect=seq),patch.object(st,'rsi',return_value=61),patch.object(st,'atr',return_value=2),patch.object(st,'adx',return_value=27):
             result=st.analyze(low,high)
         # Without a volume confirmation, score is capped at five.
         self.assertLess(result.score,6)
@@ -45,7 +45,7 @@ class MultiTimeframeStrategyTests(unittest.TestCase):
         for b in high:b['start']-=1_000_000_000;b['end']-=1_000_000_000
         low[-1].update({'o':100,'h':104,'l':99,'c':103,'volume':2000})
         seq=[100,99,98,103,98,101,100]
-        with patch.object(st,'ema',side_effect=seq),patch.object(st,'rsi',return_value=61),patch.object(st,'atr',return_value=1),patch.object(st,'adx',return_value=27):
+        with patch.object(st,'ema',side_effect=seq),patch.object(st,'rsi',return_value=61),patch.object(st,'atr',return_value=2),patch.object(st,'adx',return_value=27):
             result=st.analyze(low,high)
         self.assertEqual(result.side,'LONG')
         self.assertEqual(result.score,6)
