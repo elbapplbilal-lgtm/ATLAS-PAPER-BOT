@@ -107,7 +107,7 @@ def analyze(bars15,bars1h):
     vol_ok=vol_ratio>=1.15
     # Score counts two trend confirmations + RSI + ADX + volume + structure.
     score=2+int(rsi_ok)+int(adx_ok)+int(vol_ok)+int(structure)
-    if not rsi_ok or not adx_ok or not structure or score<5:
+    if not rsi_ok or not adx_ok or not structure or not vol_ok or score<6:
         return Setup(None,a,score,6,None,1.8,'RSI, ADX, candle trigger or volume filter not confirmed')
     distance=max(a*1.8,price*.004)
     if distance/price>.035:
