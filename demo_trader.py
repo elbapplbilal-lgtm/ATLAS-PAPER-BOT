@@ -10,7 +10,7 @@ import argparse, hashlib, hmac, json, logging, math, os, time
 import urllib.request, urllib.parse
 from decimal import Decimal, ROUND_DOWN
 from pathlib import Path
-from bot import signal
+from strategy_v2 import analyze
 
 DEMO_HOST = 'https://demo-fapi.binance.com'
 SYMBOL = 'BTCUSDT'
@@ -18,12 +18,13 @@ STATE = Path('data/demo_state.json')
 MAX_STOP_RISK = Decimal('0.005')
 MAX_EXPOSURE = Decimal('0.10')
 DAILY_STOP = Decimal('0.02')
-MAX_DAILY_ENTRIES = 2
+MAX_DAILY_ENTRIES = 5
 
 class DemoError(RuntimeError):pass
 
-def api_candles():
-    q=urllib.parse.urlencode({'symbol':SYMBOL,'interval':'15m','limit':180})
+def api_candles(interval='15m'):
+    if interval not in ('15m','1h'):raise DemoError('Unsupported analysis interval')
+    q=urllib.parse.urlencode({'symbol':SYMBOL,'interval':interval,'limit':300})
     req=urllib.request.Request(DEMO_HOST+'/fapi/v1/klines?'+q,headers={'User-Agent':'ATLAS-DEMO-ONLY'})
     try:
         with urllib.request.urlopen(req,timeout=12) as r:data=json.load(r)
@@ -38,9 +39,9 @@ def api_candles():
                 raise ValueError()
         except Exception as e:raise DemoError('Invalid demo exchange price') from e
         if b['end']<now:bars.append(b)
-    if len(bars)<65 or any(a['start']>=b['start'] for a,b in zip(bars,bars[1:])):
+    if len(bars)<225 or any(a['start']>=b['start'] for a,b in zip(bars,bars[1:])):
         raise DemoError('Not enough closed demo candles')
-    if now-bars[-1]['end']>25*60*1000:raise DemoError('Demo candles stale')
+    if now-bars[-1]['end']>(25 if interval=='15m' else 80)*60*1000:raise DemoError('Demo '+interval+' candles stale')
     return bars
 
 class DemoClient:
@@ -117,8 +118,12 @@ def account_checks(client):
     return wallet,available
 
 def run_once(client=None,enable_orders=False):
-    bars=api_candles();bar=bars[-1];direction,vol=signal(bars)
-    if not direction:return 'No signal from closed DEMO candle; no order.'
+    bars=api_candles();bar=bars[-1]
+    higher=[b for b in api_candles('1h') if b['end']<=bar['end']]
+    try: setup=analyze(bars,higher)
+    except ValueError as e:raise DemoError('Unable to validate multi-timeframe candles: '+str(e)) from e
+    direction=setup.side
+    if not direction:return 'No confirmed 15m+1h DEMO setup (score='+str(setup.score)+'/6): '+setup.reason
     state=read_state()
     day=time.strftime('%Y-%m-%d',time.gmtime(bar['end']/1000))
     if state.get('day')!=day:state=dict(day=day,initial_wallet=None,entries_today=0,last_attempted_bar=None)
@@ -134,7 +139,7 @@ def run_once(client=None,enable_orders=False):
     if state['entries_today']>=MAX_DAILY_ENTRIES:raise DemoError('DEMO entry limit reached')
     rule=filters(client)
     entry=Decimal(str(bar['c']))
-    distance=max(Decimal(str(vol))*Decimal('1.8'),entry*Decimal('0.004'))
+    distance=Decimal(str(setup.stop_distance))
     if distance/entry>Decimal('0.05'):return 'Volatility too high; no order.'
     quantity=quant_down(min(wallet*MAX_STOP_RISK/distance,available*MAX_EXPOSURE/entry),rule['step'])
     if quantity<rule['minQty'] or quantity>rule['maxQty'] or quantity*entry<Decimal('10'):
@@ -159,7 +164,7 @@ def run_once(client=None,enable_orders=False):
     fill=Decimal(str(placed.get('avgPrice') or '0'))
     if fill<=0:raise DemoError('No valid fill price: DEMO manual review required')
     stop=quant_down(fill-distance if direction=='LONG' else fill+distance,rule['tick'])
-    target=quant_down(fill+distance*Decimal('1.8') if direction=='LONG' else fill-distance*Decimal('1.8'),rule['tick'])
+    target=quant_down(fill+distance*Decimal(str(setup.rr)) if direction=='LONG' else fill-distance*Decimal(str(setup.rr)),rule['tick'])
     if min(stop,target)<=0:raise DemoError('Invalid protective levels; manual DEMO review')
     def protect(kind,trigger):
         return client.call('POST','/fapi/v1/algoOrder',
@@ -179,7 +184,7 @@ def run_once(client=None,enable_orders=False):
     try:protect('TAKE_PROFIT_MARKET',target)
     except DemoError:
         raise DemoError('DEMO stop in place; take-profit failed. Manual review needed.')
-    return 'DEMO filled '+direction+' '+SYMBOL+' qty='+dec(quantity)+' SL='+dec(stop)+' TP='+dec(target)
+    return 'DEMO filled '+direction+' '+SYMBOL+' confidence confirmations='+str(setup.score)+'/6 (not probability) qty='+dec(quantity)+' SL='+dec(stop)+' TP='+dec(target)
 
 def main():
     parser=argparse.ArgumentParser(description='BINANCE FUTURES DEMO ONLY')
@@ -187,15 +192,17 @@ def main():
     args=parser.parse_args()
     try:
         if args.mode=='signal':
-            bars=api_candles()
-            print('Binance DEMO signal:',signal(bars)[0] or 'NONE')
+            bars=api_candles();higher=[b for b in api_candles('1h') if b['end']<=bars[-1]['end']]
+            setup=analyze(bars,higher)
+            print('Binance DEMO 15m+1h analysis:',setup.side or 'NO TRADE',
+                  'confirmations=',str(setup.score)+'/6','reason=',setup.reason)
             return 0
         if args.mode=='health':
             wallet,avail=account_checks(DemoClient())
             print('Demo connection works. Balance:',wallet,'Available:',avail)
             return 0
         print(run_once(enable_orders=True));return 0
-    except DemoError as exc:
+    except (DemoError,ValueError) as exc:
         logging.error('%s',exc);return 2
 
 if __name__=='__main__':raise SystemExit(main())
