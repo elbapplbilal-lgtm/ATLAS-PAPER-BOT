@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Static Python syntax
-        run: python -m py_compile bot.py demo_trader.py check_demo_connection.py termux_runner.py strategy_v2.py
+        run: python -m py_compile bot.py demo_trader.py check_demo_connection.py termux_runner.py strategy_v2.py live_readonly.py
       - name: All mocked unit tests (no Binance credentials)
         run: python -m unittest discover -s tests -v
       - name: Offline-only paper test
