@@ -150,12 +150,32 @@ def write_report(report, json_path=Path("data/hyperliquid_btc_15m.json"),
     os.replace(temp_md, markdown_path)
 
 
+
+def write_chart_data(bars, path=Path("data/hyperliquid_btc_candles.json")):
+    """Save actual closed BTC candles for the mobile chart; never simulate missing data."""
+    data = {
+        "exchange": "Hyperliquid",
+        "market": "BTC perpetual",
+        "interval": "15m",
+        "candles": [
+            {"t": b["start"], "c": round(b["c"], 6)}
+            for b in bars[-120:]
+        ],
+    }
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(data, separators=(",", ":")) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+
+
 def main():
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     now_ms = int(time.time() * 1000)
     bars = fetch_closed_candles(now_ms)
     report = build_report(bars, now_ms)
     write_report(report)
+    write_chart_data(bars)
     print(json.dumps(report, indent=2))
     return 0
 
