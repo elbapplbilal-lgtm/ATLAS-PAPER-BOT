@@ -1,4 +1,4 @@
-name: ATLAS Hyperliquid BTC 15m (READ ONLY)
+name: ATLAS Hyperliquid BTC - تحليل كل 15 دقيقة (قراءة فقط)
 on:
   push:
     paths:
