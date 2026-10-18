@@ -6,7 +6,7 @@
   "interval": "15m",
   "mode": "READ_ONLY_ANALYSIS",
   "last_closed_candle_utc": "2026-10-18T09:29:59.999000+00:00",
-  "generated_at_utc": "2026-10-18T09:43:08.815000+00:00",
+  "generated_at_utc": "2026-10-18T09:43:20.040000+00:00",
   "close_usd": 81974.0,
   "ema9": 81777.82,
   "ema21": 81731.37,
