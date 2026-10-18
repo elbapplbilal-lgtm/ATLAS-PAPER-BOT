@@ -1,0 +1,49 @@
+name: ATLAS Website - GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'assets/**'
+      - 'data/hyperliquid_btc_15m.json'
+      - 'data/hyperliquid_btc_candles.json'
+      - '.github/workflows/deploy-atlas-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: atlas-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare safe static web files
+        run: |
+          mkdir -p _site/assets _site/data
+          cp index.html _site/
+          cp assets/atlas.css assets/atlas.js _site/assets/
+          cp data/hyperliquid_btc_15m.json data/hyperliquid_btc_candles.json _site/data/
+          touch _site/.nojekyll
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy site
+        id: deployment
+        uses: actions/deploy-pages@v4
