@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from hyperliquid_monitor import INFO_URL, fetch_closed_candles, build_report, write_report
+from hyperliquid_monitor import INFO_URL, fetch_closed_candles, build_report, write_report, write_chart_data
 
 NOW_MS = 1_800_000_000_000
 CANDLE_MS = 900_000
@@ -63,6 +63,18 @@ class HyperliquidMonitorTests(unittest.TestCase):
         items[-1]["c"] = "0"
         with self.assertRaisesRegex(ValueError, "Invalid"):
             fetch_closed_candles(now_ms=NOW_MS, opener=as_opener(items))
+
+    def test_chart_contains_only_real_closed_candles(self):
+        bars = fetch_closed_candles(now_ms=NOW_MS, opener=as_opener(sample()))
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "candles.json"
+            write_chart_data(bars, path)
+            payload = json.loads(path.read_text())
+            self.assertEqual(payload["exchange"], "Hyperliquid")
+            self.assertEqual(payload["interval"], "15m")
+            self.assertEqual(len(payload["candles"]), 80)
+            self.assertEqual(payload["candles"][-1]["c"], bars[-1]["c"])
+            self.assertEqual(payload["candles"][-1]["t"], bars[-1]["start"])
 
     def test_report_is_saved_locally_without_orders(self):
         report = build_report(fetch_closed_candles(NOW_MS, as_opener(sample())), NOW_MS)
