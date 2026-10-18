@@ -56,7 +56,9 @@
     setText("rsiValue", number(r.rsi14));
     setText("atrValue", money(r.atr14_usd));
     setText("ema9", money(r.ema9));
+    setText("ema9b", money(r.ema9));
     setText("ema21", money(r.ema21));
+    setText("ema21b", money(r.ema21));
     setText("ema50", money(r.ema50));
     setText("supportValue", money(r.support_20_prior_candles));
     setText("resistanceValue", money(r.resistance_20_prior_candles));
