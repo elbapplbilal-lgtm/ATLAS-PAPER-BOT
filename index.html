@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#081322">
+  <meta name="description" content="ATLAS Market Intelligence: read-only Bitcoin market monitoring and technical indicators from Hyperliquid.">
+  <title>ATLAS | مراقبة BTC — Hyperliquid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="./assets/atlas.css">
+  <script src="./assets/atlas.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./" aria-label="ATLAS - الصفحة الرئيسية">
+        <span class="brand-emblem">
+          <svg width="27" height="27" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M4 24 12.5 8l5 10 3.5-6L28 24" stroke="#69d5ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="25.5" cy="9.5" r="2" fill="#42ddb9"/>
+          </svg>
+        </span>
+        <span>
+          <span class="brand-letters">ATLAS</span>
+          <span class="brand-caption" style="display:block">MARKET INTELLIGENCE</span>
+        </span>
+      </a>
+      <div class="head-actions">
+        <span class="pill" id="feedStatus" role="status" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span><span id="feedText">تحميل...</span>
+        </span>
+        <button type="button" class="icon-btn" id="refreshBtn" aria-label="تحديث بيانات Hyperliquid" title="تحديث البيانات">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-5l-3 3"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14 5l3-3"/><path d="M21 20v-5h-5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="intro">
+      <div>
+        <div class="eyebrow" dir="ltr">ATLAS / CRYPTO MARKET MONITOR</div>
+        <h1>لوحة مراقبة السوق</h1>
+        <p>قراءة وتحليل بيانات حقيقية من Hyperliquid — بلا تداول آلي أو مفاتيح خاصة.</p>
+      </div>
+      <a class="source-tag" href="https://hyperliquid.xyz/" target="_blank" rel="noopener noreferrer" aria-label="زيارة موقع Hyperliquid الرسمي">
+        <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M2 12c3-8 5 5 9 0s7-9 11 0" stroke="#5bd2b9" stroke-width="3.2" stroke-linecap="round"/></svg>
+        SOURCE <strong>Hyperliquid</strong>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div id="errorBanner" class="error-banner" role="alert" hidden></div>
+
+    <div class="primary-grid">
+      <section class="panel hero" aria-labelledby="assetTitle">
+        <div class="hero-header">
+          <div class="asset">
+            <span class="btc-icon" aria-hidden="true">₿</span>
+            <div>
+              <div class="asset-name" id="assetTitle"><span dir="ltr">BTC / USD</span></div>
+              <div class="asset-meta">HYPERLIQUID PERPETUAL</div>
+            </div>
+          </div>
+          <span class="tag">شموع 15 دقيقة</span>
+        </div>
+
+        <div class="hero-price">
+          <div class="price skeleton" id="headlinePrice" aria-live="polite">—</div>
+          <span id="percentChange" class="change neutral" dir="ltr">—</span>
+        </div>
+        <div class="price-note" id="rangeLabel">في انتظار تحميل الشموع</div>
+
+        <div class="hero-chart-controls">
+          <span class="small-head">حركة سعر البيتكوين</span>
+          <div class="selectors" role="group" aria-label="الفترة المعروضة للشارت">
+            <button class="range-btn" type="button" data-range="1h" aria-pressed="false">1H</button>
+            <button class="range-btn" type="button" data-range="4h" aria-pressed="false">4H</button>
+            <button class="range-btn active" type="button" data-range="24h" aria-pressed="true">24H</button>
+          </div>
+        </div>
+
+        <div class="chart-wrap" dir="ltr">
+          <svg id="priceChart" viewBox="0 0 800 230" preserveAspectRatio="none" role="img" aria-label="رسم بياني لسعر BTC من شموع Hyperliquid المغلقة"></svg>
+          <div id="chartEmpty" class="chart-placeholder">في انتظار تحديث ملف الشموع الحقيقية من ATLAS</div>
+          <div id="chartTooltip" class="chart-tooltip" hidden></div>
+        </div>
+        <div class="chart-axis">
+          <span id="axisStart">—</span><span id="axisEnd">—</span>
+        </div>
+        <div class="chart-footer">
+          <span id="ageText">لم تصل البيانات بعد</span>
+          <span>آخر إغلاق: <b id="closeTime">—</b></span>
+        </div>
+      </section>
+
+      <section class="panel side" aria-labelledby="analysisTitle">
+        <div class="section-heading">
+          <h2 id="analysisTitle">تحليل ATLAS</h2>
+          <span class="subtle">EMA + RSI</span>
+        </div>
+        <div class="trend-card">
+          <div class="trend-label">الاتجاه الفني الحالي</div>
+          <div class="trend-line">
+            <span class="trend-glyph wait" id="trendGlyph" aria-hidden="true">↔</span>
+            <span id="marketTrend">انتظار البيانات</span>
+          </div>
+          <p class="trend-detail" id="trendExplain">النتيجة تحسب من بيانات شموع مغلقة، وليس من توقعات مضمونة.</p>
+        </div>
+        <div>
+          <div class="signal-row">
+            <span>إشارة استراتيجية ATLAS</span>
+            <strong class="signal-val" id="strategySignal">—</strong>
+          </div>
+          <p class="signal-desc">الإشارات للمراقبة والتعلم فقط. لا يتم فتح أي صفقة أو إرسال أوامر.</p>
+        </div>
+        <div class="readonly">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <span>وضع آمن للقراءة فقط — بدون محفظة، بدون API Key، وبدون تداول حقيقي.</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="metrics-header">
+      <h2>مؤشرات السوق</h2>
+      <span class="subtle">آخر شمعة مغلقة · 15m</span>
+    </div>
+    <section class="metrics" aria-label="مؤشرات السوق الأساسية">
+      <article class="panel metric">
+        <div class="metric-top"><span class="metric-title">مؤشر القوة النسبية</span><span class="metric-icon">↗</span></div>
+        <div class="metric-value" id="rsiValue">—</div>
+        <div class="meter"><span id="rsiMeter"></span></div>
+        <div class="metric-description">RSI (14) · من 0 إلى 100</div>
+      </article>
+      <article class="panel metric">
+        <div class="metric-top"><span class="metric-title">التذبذب المتوسط</span><span class="metric-icon">≈</span></div>
+        <div class="metric-value smaller" id="atrValue">—</div>
+        <div class="metric-description">ATR (14) · بالدولار</div>
+      </article>
+      <article class="panel metric">
+        <div class="metric-top"><span class="metric-title">المتوسط السريع</span><span class="metric-icon">⌁</span></div>
+        <div class="metric-value smaller" id="ema9">—</div>
+        <div class="metric-description">EMA 9 · سعر BTC</div>
+      </article>
+      <article class="panel metric">
+        <div class="metric-top"><span class="metric-title">المتوسط المتوسط</span><span class="metric-icon">⌁</span></div>
+        <div class="metric-value smaller" id="ema21">—</div>
+        <div class="metric-description">EMA 21 · سعر BTC</div>
+      </article>
+    </section>
+
+    <div class="info-grid">
+      <section class="panel info-panel" aria-labelledby="levelsTitle">
+        <div class="section-heading"><h2 id="levelsTitle">مناطق السعر</h2><span class="subtle">من 20 شمعة سابقة</span></div>
+        <div class="levels">
+          <div class="level">
+            <div class="level-title"><span style="color:#6be7c4">●</span> الدعم السابق</div>
+            <div class="numeric support" id="supportValue">—</div>
+          </div>
+          <div class="level">
+            <div class="level-title"><span style="color:#ffcf80">●</span> المقاومة السابقة</div>
+            <div class="numeric resistance" id="resistanceValue">—</div>
+          </div>
+        </div>
+        <p class="level-info">هذه أقل وأعلى أسعار من 20 شمعة مكتملة قبل الشمعة الأخيرة، وليست ضماناً لارتداد السعر.</p>
+      </section>
+      <section class="panel info-panel" aria-labelledby="averagesTitle">
+        <div class="section-heading"><h2 id="averagesTitle">المتوسطات المتحركة</h2><span class="subtle">EMA</span></div>
+        <div class="ema-list">
+          <div class="ema-line"><span>EMA 9</span><b id="ema9b">—</b></div>
+          <div class="ema-line"><span>EMA 21</span><b id="ema21b">—</b></div>
+          <div class="ema-line"><span>EMA 50</span><b id="ema50">—</b></div>
+        </div>
+        <p class="level-info">النتيجة تتغير مع كل شمعة جديدة من السوق.</p>
+      </section>
+    </div>
+
+    <p class="footnote">تنبيه: أسعار وتحليلات ATLAS معلوماتية فقط، وقد تتأخر بسبب GitHub Actions وGitHub Pages. تحديث الصفحة لا يعني وصول سعر مباشر كل ثانية. لا توجد أرباح مضمونة أو توصيات مالية.</p>
+
+    <footer class="footer">
+      <div dir="ltr"><strong>ATLAS</strong> · MARKET INTELLIGENCE · PAPER / READ ONLY</div>
+      <div>آخر تقرير: <span id="updatedTime">—</span></div>
+      <a href="https://github.com/elbapplbilal-lgtm/ATLAS-PAPER-BOT" target="_blank" rel="noopener noreferrer">المصدر على GitHub ↗</a>
+    </footer>
+  </main>
+</body>
+</html>
