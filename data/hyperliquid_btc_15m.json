@@ -1,0 +1,21 @@
+{
+  "project": "ATLAS-PAPER-BOT",
+  "exchange": "Hyperliquid",
+  "source": "https://api.hyperliquid.xyz/info",
+  "market": "BTC perpetual",
+  "interval": "15m",
+  "mode": "READ_ONLY_ANALYSIS",
+  "last_closed_candle_utc": "2026-10-18T09:14:59.999000+00:00",
+  "generated_at_utc": "2026-10-18T09:21:59.249000+00:00",
+  "close_usd": 81933.0,
+  "ema9": 81728.77,
+  "ema21": 81707.11,
+  "ema50": 81646.02,
+  "rsi14": 66.39,
+  "atr14_usd": 104.47,
+  "support_20_prior_candles": 81584.0,
+  "resistance_20_prior_candles": 81914.0,
+  "trend": "BULLISH",
+  "existing_atlas_strategy_signal": "NO_SIGNAL",
+  "disclaimer": "Analysis only. No trades, orders, wallet access, or guaranteed profits."
+}
