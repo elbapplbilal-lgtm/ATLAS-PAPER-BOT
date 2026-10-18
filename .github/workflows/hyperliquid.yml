@@ -1,5 +1,9 @@
 name: ATLAS Hyperliquid BTC 15m (READ ONLY)
 on:
+  push:
+    paths:
+      - 'hyperliquid_monitor.py'
+      - '.github/workflows/hyperliquid.yml'
   workflow_dispatch:
   schedule:
     # A few minutes after each 15m candle. GitHub may delay scheduled runs.
