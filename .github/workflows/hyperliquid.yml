@@ -1,0 +1,39 @@
+name: ATLAS Hyperliquid BTC 15m (READ ONLY)
+on:
+  workflow_dispatch:
+  schedule:
+    # A few minutes after each 15m candle. GitHub may delay scheduled runs.
+    - cron: '8,23,38,53 * * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atlas-hyperliquid-readonly
+  cancel-in-progress: false
+
+jobs:
+  market-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify Hyperliquid feed using mocked, offline tests
+        run: python -m unittest discover -s tests -p 'test_hyperliquid_monitor.py' -v
+      - name: Analyze BTC 15m closed candles from public Hyperliquid API (NO TRADING)
+        run: python hyperliquid_monitor.py
+      - name: Save read-only market report
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/hyperliquid_btc_15m.json data/hyperliquid_btc_15m.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'ATLAS Hyperliquid 15m market update [skip ci]'
+            git push origin HEAD:main
+          fi
