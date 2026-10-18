@@ -36,7 +36,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/hyperliquid_btc_15m.json data/hyperliquid_btc_15m.md
+          git add data/hyperliquid_btc_15m.json data/hyperliquid_btc_15m.md data/hyperliquid_btc_candles.json
           if ! git diff --cached --quiet; then
             git commit -m 'ATLAS Hyperliquid 15m market update [skip ci]'
             git push origin HEAD:main
