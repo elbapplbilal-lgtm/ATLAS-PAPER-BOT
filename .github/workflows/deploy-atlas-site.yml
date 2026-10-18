@@ -36,10 +36,14 @@ jobs:
           cp assets/atlas.css assets/atlas.js _site/assets/
           cp data/hyperliquid_btc_15m.json data/hyperliquid_btc_candles.json _site/data/
           touch _site/.nojekyll
+      - name: Verify JavaScript, chart data and offline tests
+        run: |
+          node --check assets/atlas.js
+          python -m unittest discover -s tests -p 'test_hyperliquid_monitor.py' -v
+          test -s data/hyperliquid_btc_15m.json
+          test -s data/hyperliquid_btc_candles.json
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
