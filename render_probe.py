@@ -60,4 +60,7 @@ class Handler(BaseHTTPRequestHandler):
 if __name__=="__main__":
     port=int(os.environ.get("PORT","10000"))
     print("ATLAS public read-only hosting probes starting",flush=True)
+    for label,url in PUBLIC_ENDPOINTS.values():
+        result=public_probe(label,url)
+        print("STARTUP PUBLIC REACHABILITY:",label,"HTTP",result.get("http_status","error"),"reachable",result["reachable"],flush=True)
     ThreadingHTTPServer(("0.0.0.0",port),Handler).serve_forever()
