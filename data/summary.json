@@ -1,11 +1,11 @@
 {
   "mode": "BINANCE PUBLIC DATA: PAPER ONLY",
   "starting_usdt": 5000.0,
-  "balance_usdt": 4998.2,
-  "closed_trades": 0,
-  "wins": 0,
-  "win_rate": null,
-  "open_positions": 2,
-  "scanned_closed_candles": 12,
+  "balance_usdt": 4888.61,
+  "closed_trades": 12,
+  "wins": 2,
+  "win_rate": 16.67,
+  "open_positions": 0,
+  "scanned_closed_candles": 1380,
   "disclaimer": "PAPER ONLY; hypothetical fills, no funding/liquidation modeled"
 }

@@ -1,42 +1,132 @@
 {
-  "balance": 4998.200413311239,
-  "positions": {
-    "AVAXUSDT": {
+  "balance": 4888.608102266172,
+  "positions": {},
+  "trades": [
+    {
+      "symbol": "AVAXUSDT",
       "side": "SHORT",
       "entry": 9.950014099999999,
-      "qty": 288.46360466853946,
-      "stop": 10.036680145890697,
-      "target": 9.79401521739674,
-      "bars_held": 0,
-      "entry_fee": 1.1480867735155174
+      "exit": 9.796953421961959,
+      "pnl": 41.873922346800654,
+      "reason": "TARGET",
+      "end": 1792692899999
     },
-    "BNBUSDT": {
+    {
+      "symbol": "BNBUSDT",
       "side": "SHORT",
       "entry": 721.663436,
-      "qty": 2.2569382164389484,
-      "stop": 724.550089744,
-      "target": 716.4674592608001,
-      "bars_held": 0,
-      "entry_fee": 0.6514999152460174
+      "exit": 724.7674547709232,
+      "pnl": -8.31138065056786,
+      "reason": "STOP",
+      "end": 1792692899999
+    },
+    {
+      "symbol": "BNBUSDT",
+      "side": "SHORT",
+      "entry": 728.1115010000001,
+      "exit": 731.9106917920755,
+      "pnl": -12.89437962795293,
+      "reason": "STOP",
+      "end": 1792697399999
+    },
+    {
+      "symbol": "DOTUSDT",
+      "side": "SHORT",
+      "entry": 1.1155652299999999,
+      "exit": 1.1288474220535318,
+      "pnl": -27.078689880193405,
+      "reason": "STOP",
+      "end": 1792719899999
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "side": "SHORT",
+      "entry": 9.105267600000001,
+      "exit": 9.204160900887468,
+      "pnl": -27.850194559993245,
+      "reason": "STOP",
+      "end": 1792720799999
+    },
+    {
+      "symbol": "SOLUSDT",
+      "side": "LONG",
+      "entry": 104.60137099999999,
+      "exit": 103.88378410152538,
+      "pnl": -24.71622193719383,
+      "reason": "STOP",
+      "end": 1792729799999
+    },
+    {
+      "symbol": "DOGEUSDT",
+      "side": "LONG",
+      "entry": 0.079533853,
+      "exit": 0.0803352641104445,
+      "pnl": 29.728930658792134,
+      "reason": "TARGET",
+      "end": 1792745999999
+    },
+    {
+      "symbol": "LTCUSDT",
+      "side": "LONG",
+      "entry": 59.567865,
+      "exit": 59.20284283816116,
+      "pnl": -10.268551369549488,
+      "reason": "STOP",
+      "end": 1792747799999
+    },
+    {
+      "symbol": "DOTUSDT",
+      "side": "LONG",
+      "entry": 1.1980593099999999,
+      "exit": 1.180687662261984,
+      "pnl": -26.758222111605217,
+      "reason": "STOP",
+      "end": 1792748699999
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "side": "LONG",
+      "entry": 9.233769299999999,
+      "exit": 9.15855180435488,
+      "pnl": -11.091333544323275,
+      "reason": "STOP",
+      "end": 1792754099999
+    },
+    {
+      "symbol": "DOTUSDT",
+      "side": "LONG",
+      "entry": 1.18805631,
+      "exit": 1.1704644219637055,
+      "pnl": -26.515234036593927,
+      "reason": "STOP",
+      "end": 1792754099999
+    },
+    {
+      "symbol": "BNBUSDT",
+      "side": "LONG",
+      "entry": 746.213797,
+      "exit": 743.0059731294565,
+      "pnl": -7.510543021444885,
+      "reason": "STOP",
+      "end": 1792765799999
     }
-  },
-  "trades": [],
+  ],
   "processed": {
-    "ADAUSDT": 1792194300000,
-    "AVAXUSDT": 1792194300000,
-    "BNBUSDT": 1792194300000,
-    "BTCUSDT": 1792194300000,
-    "DOGEUSDT": 1792194300000,
-    "DOTUSDT": 1792194300000,
-    "ETHUSDT": 1792194300000,
-    "LINKUSDT": 1792194300000,
-    "LTCUSDT": 1792194300000,
-    "SOLUSDT": 1792194300000,
-    "TRXUSDT": 1792194300000,
-    "XRPUSDT": 1792194300000
+    "ADAUSDT": 1792793700000,
+    "AVAXUSDT": 1792793700000,
+    "BNBUSDT": 1792793700000,
+    "BTCUSDT": 1792793700000,
+    "DOGEUSDT": 1792793700000,
+    "DOTUSDT": 1792793700000,
+    "ETHUSDT": 1792793700000,
+    "LINKUSDT": 1792793700000,
+    "LTCUSDT": 1792793700000,
+    "SOLUSDT": 1792793700000,
+    "TRXUSDT": 1792793700000,
+    "XRPUSDT": 1792793700000
   },
-  "day": "2026-10-16",
-  "day_start": 5000.0,
-  "checked": 12,
-  "skipped": 0
+  "day": "2026-10-23",
+  "day_start": 5018.861065316668,
+  "checked": 1380,
+  "skipped": 535
 }
