@@ -1,6 +1,25 @@
 {
-  "balance": 4888.608102266172,
-  "positions": {},
+  "balance": 4762.97777518199,
+  "positions": {
+    "BNBUSDT": {
+      "side": "LONG",
+      "entry": 688.826586,
+      "qty": 4.506028151528185,
+      "stop": 684.4951257072372,
+      "target": 696.6232145269731,
+      "bars_held": 14,
+      "entry_fee": 1.2415487952148203
+    },
+    "SOLUSDT": {
+      "side": "SHORT",
+      "entry": 86.334092,
+      "qty": 13.705292387361062,
+      "stop": 87.22177976913927,
+      "target": 84.7362540155493,
+      "bars_held": 8,
+      "entry_fee": 0.4732935895429319
+    }
+  },
   "trades": [
     {
       "symbol": "AVAXUSDT",
@@ -109,24 +128,204 @@
       "pnl": -7.510543021444885,
       "reason": "STOP",
       "end": 1792765799999
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "side": "LONG",
+      "entry": 8.2094621,
+      "exit": 8.163316387792532,
+      "pnl": -20.39632073424182,
+      "reason": "STOP",
+      "end": 1794157199999
+    },
+    {
+      "symbol": "LTCUSDT",
+      "side": "SHORT",
+      "entry": 51.464556,
+      "exit": 51.7343413493137,
+      "pnl": -19.099501481708806,
+      "reason": "STOP",
+      "end": 1794162599999
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "side": "LONG",
+      "entry": 8.2094621,
+      "exit": 8.154520396092952,
+      "pnl": -23.538620304373605,
+      "reason": "STOP",
+      "end": 1794173399999
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "side": "SHORT",
+      "entry": 8.153553200000001,
+      "exit": 8.071882353570354,
+      "pnl": 28.782743291391796,
+      "reason": "TARGET",
+      "end": 1794175199999
+    },
+    {
+      "symbol": "DOTUSDT",
+      "side": "SHORT",
+      "entry": 0.8895330600000001,
+      "exit": 0.87943560326,
+      "pnl": 12.888904163244044,
+      "reason": "TARGET",
+      "end": 1794175199999
+    },
+    {
+      "symbol": "ADAUSDT",
+      "side": "SHORT",
+      "entry": 0.17524741000000002,
+      "exit": 0.1777191061981261,
+      "pnl": -26.293334859206016,
+      "reason": "STOP",
+      "end": 1794180599999
+    },
+    {
+      "symbol": "ADAUSDT",
+      "side": "SHORT",
+      "entry": 0.17564729,
+      "exit": 0.17835153740271106,
+      "pnl": -25.98055108384376,
+      "reason": "STOP",
+      "end": 1794186899999
+    },
+    {
+      "symbol": "DOTUSDT",
+      "side": "SHORT",
+      "entry": 0.86494044,
+      "exit": 0.8782021002483386,
+      "pnl": -26.131009268715207,
+      "reason": "STOP",
+      "end": 1794197699999
+    },
+    {
+      "symbol": "XRPUSDT",
+      "side": "SHORT",
+      "entry": 1.12296301,
+      "exit": 1.0936351673399651,
+      "pnl": 25.24162823315436,
+      "reason": "TARGET",
+      "end": 1794203999999
+    },
+    {
+      "symbol": "ADAUSDT",
+      "side": "SHORT",
+      "entry": 0.17664699,
+      "exit": 0.17245023509922108,
+      "pnl": 36.64696458074498,
+      "reason": "TARGET",
+      "end": 1794208499999
+    },
+    {
+      "symbol": "BNBUSDT",
+      "side": "SHORT",
+      "entry": 687.463699,
+      "exit": 677.4880479286328,
+      "pnl": 23.547812445099645,
+      "reason": "TARGET",
+      "end": 1794208499999
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "side": "SHORT",
+      "entry": 7.907627000000001,
+      "exit": 7.99949694158435,
+      "pnl": -12.660228643655532,
+      "reason": "STOP",
+      "end": 1794214799999
+    },
+    {
+      "symbol": "BTCUSDT",
+      "side": "SHORT",
+      "entry": 73910.32025,
+      "exit": 74479.77993175632,
+      "pnl": -26.95290190647991,
+      "reason": "STOP",
+      "end": 1794214799999
+    },
+    {
+      "symbol": "DOTUSDT",
+      "side": "SHORT",
+      "entry": 0.8551433800000001,
+      "exit": 0.866371268448617,
+      "pnl": -2.761834908660306,
+      "reason": "STOP",
+      "end": 1794214799999
+    },
+    {
+      "symbol": "BNBUSDT",
+      "side": "SHORT",
+      "entry": 681.39552,
+      "exit": 686.506944459808,
+      "pnl": -17.816068717966733,
+      "reason": "STOP",
+      "end": 1794223799999
+    },
+    {
+      "symbol": "ETHUSDT",
+      "side": "SHORT",
+      "entry": 2109.177057,
+      "exit": 2132.9521319897267,
+      "pnl": -26.599485923518078,
+      "reason": "STOP",
+      "end": 1794223799999
+    },
+    {
+      "symbol": "DOGEUSDT",
+      "side": "SHORT",
+      "entry": 0.06877936,
+      "exit": 0.06950311001680431,
+      "pnl": -26.52663716105111,
+      "reason": "STOP",
+      "end": 1794228299999
+    },
+    {
+      "symbol": "XRPUSDT",
+      "side": "SHORT",
+      "entry": 1.0860740800000002,
+      "exit": 1.099674444388212,
+      "pnl": -26.109391535868262,
+      "reason": "STOP",
+      "end": 1794228299999
+    },
+    {
+      "symbol": "LTCUSDT",
+      "side": "LONG",
+      "entry": 51.255372,
+      "exit": 52.21585198471458,
+      "pnl": 40.33740545263606,
+      "reason": "TARGET",
+      "end": 1794239999999
+    },
+    {
+      "symbol": "BTCUSDT",
+      "side": "LONG",
+      "entry": 75110.22631,
+      "exit": 74509.13703048503,
+      "pnl": -10.495056336405947,
+      "reason": "STOP",
+      "end": 1794246299999
     }
   ],
   "processed": {
-    "ADAUSDT": 1792793700000,
-    "AVAXUSDT": 1792793700000,
-    "BNBUSDT": 1792793700000,
-    "BTCUSDT": 1792793700000,
-    "DOGEUSDT": 1792793700000,
-    "DOTUSDT": 1792793700000,
-    "ETHUSDT": 1792793700000,
-    "LINKUSDT": 1792793700000,
-    "LTCUSDT": 1792793700000,
-    "SOLUSDT": 1792793700000,
-    "TRXUSDT": 1792793700000,
-    "XRPUSDT": 1792793700000
+    "ADAUSDT": 1794252600000,
+    "AVAXUSDT": 1794252600000,
+    "BNBUSDT": 1794252600000,
+    "BTCUSDT": 1794252600000,
+    "DOGEUSDT": 1794252600000,
+    "DOTUSDT": 1794252600000,
+    "ETHUSDT": 1794252600000,
+    "LINKUSDT": 1794252600000,
+    "LTCUSDT": 1794252600000,
+    "SOLUSDT": 1794252600000,
+    "TRXUSDT": 1794252600000,
+    "XRPUSDT": 1794252600000
   },
-  "day": "2026-10-23",
-  "day_start": 5018.861065316668,
-  "checked": 1380,
-  "skipped": 535
+  "day": "2026-11-09",
+  "day_start": 4839.264240447439,
+  "checked": 2748,
+  "skipped": 676
 }
