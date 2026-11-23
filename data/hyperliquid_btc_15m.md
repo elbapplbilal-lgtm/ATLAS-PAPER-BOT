@@ -1,11 +1,11 @@
 # ATLAS | Hyperliquid BTC (15m)
 
-- Closed candle: **2026-11-23T10:59:59.999000+00:00**
-- Price: **$61,401.00**
-- Market trend: **MIXED / WAIT**
-- EMA9 / EMA21 / EMA50: 61419.14 / 61413.69 / 61265.93
-- RSI14: 50.46 | ATR14: $224.52
-- Prior 20-candle support / resistance: $61098.0 / $61917.0
-- ATLAS strategy signal (informational): **NO_SIGNAL**
+- Closed candle: **2026-11-23T22:29:59.999000+00:00**
+- Price: **$61,196.00**
+- Market trend: **BEARISH**
+- EMA9 / EMA21 / EMA50: 61281.38 / 61452.28 / 61607.87
+- RSI14: 42.11 | ATR14: $335.7
+- Prior 20-candle support / resistance: $60740.0 / $62057.0
+- ATLAS strategy signal (informational): **SHORT**
 
 **READ ONLY. No orders, no API wallet, no real trading.**
